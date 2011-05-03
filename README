@@ -1,0 +1,22 @@
+*GeoTag : Geo tagging tool using iPhone's backup data.
+
+*Prerequisites:
+ - For MAC OS X 
+	install ExifTool-8.56 from http://www.sno.phy.queensu.ca/~phil/exiftool/
+
+ - For Ubuntu
+	sudo apt-get install libimage-exiftool-perl
+
+*Usage:
+	geotag [iphone backup data path] [imgs path]
+	eg) ./geotag /User/yeongmin/Library/Application Support/MobileSync/Backup/21e23s31... /User/yeongmin/myphotos
+
+ - default location of iphone backup data is 
+	/User/<user name>/Library/Application Support/MobileSync/Backup/<random string>/
+ - devices can be distinguished by investigating info.plist under <random string> directory.
+ - imgs path can be an img file itself or directory of imgs.
+
+*Note:
+ - geotag backs up original images with 'original' postfix in the same location.
+ - default adaptable time difference between gps information and photos is half an hour. 
+ - be aware of inaccurate location information of iPhone's backup data.

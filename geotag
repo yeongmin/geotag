@@ -1,0 +1,39 @@
+#!/bin/bash
+
+# geotag - Geo tagging tool using iphone's backup data.
+# Author : Yeongmin Kim (yeongmin.kim@gmail.com)
+# Created: 2011-04-26 
+#
+# Prerequisites : libimage-exiftool-perl for Ubuntu.
+#	          ExifTool-8.56.dmg for MacOSX. (http://www.sno.phy.queensu.ca/~phil/exiftool/)
+#
+#
+# See also : http://en.wikipedia.org/wiki/GPS_eXchange_Format
+#            http://petewarden.github.com/iPhoneTracker/
+#            https://github.com/serialx/iphonegpx
+
+cd $PWD
+#TODO : check parameters.
+if [ $# -lt 2 ]
+then
+    echo "Usage: geotag [backup data path] [img]"
+    exit 0
+fi
+
+LOC_CURRENT=$PWD;
+
+#TODO : make tool possible to run from anywhere 
+cd "$1"
+TMP_DB=`$LOC_CURRENT/extract-consolidated.db.py | grep consolidated`
+TMP_DB=${TMP_DB##*(}    
+TMP_DB=${TMP_DB%%)*}
+cp -f $TMP_DB $LOC_CURRENT/.consolidated.db
+
+cd $LOC_CURRENT
+$LOC_CURRENT/generate-gpx.py > .track.gpx
+#TODO : pass options to exiftool (eg. time synchronization) 
+exiftool -geotag .track.gpx "$2" 2> /dev/null 
+
+rm -f .consolidated.db
+rm -f .track.gpx
+rm -rf sqlite3
